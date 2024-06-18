@@ -3,6 +3,7 @@ import random
 import sys
 import pygame as pg
 import time
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 WIDTH, HEIGHT = 1200, 700
@@ -13,6 +14,18 @@ DELTA = {  # 移動量辞書
     pg.K_RIGHT: (+5, 0),
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+ALFA = {#向き転換辞書
+    (0, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0), #初期状態 
+    (0, -5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"),True, False), 90, 2.0), #右斜め上
+    (+5, -5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"),True, False), 45, 2.0), #右
+    (+5, 0):  pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 0, 2.0), #右斜め下
+    (+5, +5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), -45, 2.0), #下
+    (0, +5): pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"),True, False), 270, 2.0), #
+    (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 2.0),
+    (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0),
+    (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2.0),
+    }
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
@@ -93,7 +106,8 @@ def main():
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-        screen.blit(kk_img, kk_rct)
+        dx = ALFA[tuple(sum_mv)]
+        screen.blit(dx, kk_rct)
 
         bb_rct.move_ip(vx, vy)
         yoko, tate = check_bound(bb_rct)
