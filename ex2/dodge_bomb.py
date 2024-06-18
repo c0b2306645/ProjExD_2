@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1200, 700
@@ -27,6 +28,37 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+def gameOver(screen):
+    """
+    こうかとんが爆弾に衝突した際に
+    ・画面をブラックアウトする
+    ・泣いているこうかとんと
+    ・「Game Over」の文字列を表示する
+    ・表示時間は５秒間
+    """
+
+    black_img = pg.Surface((WIDTH,HEIGHT))
+    pg.draw.rect(black_img,(0,0,0), pg.Rect(0,0,WIDTH, HEIGHT))
+    black_img.set_alpha(200)
+    black_rct = black_img.get_rect()
+    screen.blit(black_img,black_rct)
+    fonto = pg.font.Font(None,80)
+    txt = fonto.render("Game Over",True,(255, 255, 255))
+    txt_rct = txt.get_rect()
+    txt_rct.center=WIDTH/2, HEIGHT/2
+    # block = pg.Surface((WIDTH,HEIGHT))
+    # block_rct = block.get_rect()
+    # screen.blit(block, block_rct)
+    screen.blit(txt,txt_rct)
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = WIDTH/2-250, HEIGHT/2
+    screen.blit(kk_img,kk_rct)
+    kk_rct.center = WIDTH/2+250, HEIGHT/2
+    screen.blit(kk_img,kk_rct)
+    pg.display.update()
+    time.sleep(5)
+    
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -48,6 +80,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bb_rct):  # 衝突判定
+            gameOver(screen)
             return  # ゲームオーバー
         screen.blit(bg_img, [0, 0]) 
 
