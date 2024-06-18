@@ -88,6 +88,8 @@ def main():
     vx, vy = +5, +5  # 爆弾の横方向速度，縦方向速度
     clock = pg.time.Clock()
     tmr = 0
+
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
